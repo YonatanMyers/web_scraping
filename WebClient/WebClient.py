@@ -1,7 +1,8 @@
-from League.Round import Round
-from League.League import League
-
 from selenium import webdriver
+
+from League.League import League
+from League.Round import Round
+
 
 # todo: improve web scraper to start at: http://sports.walla.co.il/category/157 and read all rounds
 # todo: this ^ must be done as well as reading everything in the existing "isr_league.pickle" or from
@@ -20,7 +21,7 @@ class WebClient(object):
         Init the connection with the browser
         """
         super().__init__()
-        self.driverPath = r"E:\instalesAndDownloads\WebDriver\chromedriver.exe"
+        self.driverPath = r"C:\Yoni\Programing\webDrivers\chromedriver"
         self.chrome = webdriver.Chrome(self.driverPath)
 
     def collect_league(self, teems_x_path, score_x_path):
@@ -34,8 +35,7 @@ class WebClient(object):
         rounds = []
         team_2_ind = {}
         teem_list = ''
-        urls = [[55, 27, 'http://sports.walla.co.il/leagueround/201', 'str(i)', '?leagueId=2343'],
-                [157, 7, 'http://sports.walla.co.il/category/', 'str(i)']]
+        urls = [[9, 6, 'http://sports.walla.co.il/leagueround/211', 'str(i)', '?leagueId=2437']]
         for url_i in urls:
             for i in range(url_i[0], url_i[0] + url_i[1]):
                 url = self.make_url(url_i, i)
@@ -63,7 +63,10 @@ class WebClient(object):
 
     def make_url(self, url_i, i):
         url_i = url_i[2:]
-        url_strs = [elem if elem != 'str(i)' else str(i) for elem in url_i]
+        str_i = str(i)
+        if i < 10:
+            str_i = str(0) + str(i)
+        url_strs = [elem if elem != 'str(i)' else str_i for elem in url_i]
         url = ''
         for ix in range(len(url_strs)):
             url += url_strs[ix]

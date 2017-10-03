@@ -1,7 +1,9 @@
-from WebClient.WebClient import WebClient
-from League.League import League
-from Solver.Solver import LeagueSolver
 import pickle
+
+from Solver.Solver import LeagueSolver
+from WebClient.WebClient import WebClient
+
+
 # import jsonpickle
 # import json
 
@@ -12,8 +14,8 @@ def main():
     teems_x_path = """//*/h4/a"""
     score_x_path = """//*/div/p[@class="score"]"""
 
-    # load = False
-    load = True
+    load = False
+    # load = True
 
     if not load:
         web_client = WebClient()
@@ -33,6 +35,7 @@ def main():
 
     # TODO: MUST DO count dominant teem
     # TODO: MUST DO count dominant x, y in team
+
 
 if __name__ == "__main__":
     main()

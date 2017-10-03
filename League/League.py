@@ -1,6 +1,7 @@
 from copy import deepcopy
+
 from League.Team import Team
-from operator import itemgetter, attrgetter
+
 
 class League(object):
     def __init__(self, team_2_ind, rounds):
@@ -66,7 +67,9 @@ class League(object):
         val_dif_for_team_1_x = strength_2[0] - strength_1[0]
         val_dif_for_team_1_y = strength_2[1] - strength_1[1]
 
-        team_1.get_probability_of_outcome(self, val_dif_for_team_1_x, val_dif_for_team_1_y)
+        # val_dif_for_team_1_x - by goals
+        # val_dif_for_team_1_y - by wins
+        team_1.get_probability_of_outcome(val_dif_for_team_1_x, val_dif_for_team_1_y)
 
     def __iter__(self):
         self.iter_counter = 0

@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
+
 from Util.utilFunctions import compute_distribution
+
 
 # todo: best predictor counter x, y
 # todo: team predictor counter
@@ -23,24 +25,6 @@ class Team(object):
         self.distributions = {'win': {'by_goals': {'x': [], 'y': []}, 'by_wins': {'x': [], 'y': []}},
                               'loos': {'by_goals': {'x': [], 'y': []}, 'by_wins': {'x': [], 'y': []}},
                               'tie': {'by_goals': {'x': [], 'y': []}, 'by_wins': {'x': [], 'y': []}}}
-        # self.win_x_distribution = []
-        # self.loos_x_distribution = []
-        # self.tie_x_distribution = []
-        #
-        # self.win_y_distribution = []
-        # self.loos_y_distribution = []
-        # self.tie_y_distribution = []
-        #
-        # self.win_x_distribution_x = []
-        # self.loos_x_distribution_x = []
-        # self.tie_x_distribution_x = []
-        #
-        # self.win_y_distribution_x = []
-        # self.loos_y_distribution_x = []
-        # self.tie_y_distribution_x = []
-
-    # def add_strength(self, in_strength):
-    #     self.strength.append(in_strength)
 
     def add_strength_val(self, val, win_loos_tie, goals_wins):
         self.strength_values[win_loos_tie][goals_wins].append(val)
@@ -50,83 +34,43 @@ class Team(object):
             self.distributions[win_loos_tie][goals_wins]['x'], self.distributions[win_loos_tie][goals_wins]['y']\
                 = compute_distribution(self.strength_values[win_loos_tie][goals_wins], 100)
 
-        self.num_games['win_loos_tie'] = len(self.strength_values[win_loos_tie][goals_wins])
+        self.num_games[win_loos_tie] = len(self.strength_values[win_loos_tie][goals_wins])
         self.num_games['total'] = self.num_games['loos'] + self.num_games['tie'] + self.num_games['win']
 
-    # def add_win_x(self, val):
-    #     self.win_x.append(val)
-    #     self.win_x.sort()
-    #     if len(self.win_x) > 3:
-    #         self.win_x_distribution_x, self.win_x_distribution = compute_distribution(self.win_x, 100)
-    #     self.num_games['win'] = len(self.win_x)
-    #     self.num_games['total'] = self.num_games['loos'] + self.num_games['tie'] + self.num_games['win']
-    #
-    # def add_loos_x(self, val):
-    #     self.loos_x.append(val)
-    #     self.loos_x.sort()
-    #     if len(self.loos_x) > 3:
-    #         self.loos_x_distribution_x, self.loos_x_distribution = compute_distribution(self.loos_x, 100)
-    #     self.num_games['loos'] = len(self.loos_x)
-    #     self.num_games['total'] = self.num_games['loos'] + self.num_games['tie'] + self.num_games['win']
-    #
-    # def add_tie_x(self, val):
-    #     self.tie_x.append(val)
-    #     self.tie_x.sort()
-    #     if len(self.tie_x) > 3:
-    #         self.tie_x_distribution_x, self.tie_x_distribution = compute_distribution(self.tie_x, 100)
-    #     self.num_games['tie'] = len(self.tie_x)
-    #     self.num_games['total'] = self.num_games['loos'] + self.num_games['tie'] + self.num_games['win']
-    #
-    # def add_win_y(self, val):
-    #     self.win_y.append(val)
-    #     self.win_y.sort()
-    #     if len(self.win_y) > 3:
-    #         self.win_y_distribution_x, self.win_y_distribution = compute_distribution(self.win_y, 100)
-    #     self.num_games['win'] = len(self.win_y)
-    #     self.num_games['total'] = self.num_games['loos'] + self.num_games['tie'] + self.num_games['win']
-    #
-    # def add_loos_y(self, val):
-    #     self.loos_y.append(val)
-    #     self.loos_y.sort()
-    #     if len(self.loos_y) > 3:
-    #         self.loos_y_distribution_x, self.loos_y_distribution = compute_distribution(self.loos_y, 100)
-    #     self.num_games['loos'] = len(self.loos_y)
-    #     self.num_games['total'] = self.num_games['loos'] + self.num_games['tie'] + self.num_games['win']
-    #
-    # def add_tie_y(self, val):
-    #     self.tie_y.append(val)
-    #     self.tie_y.sort()
-    #     if len(self.tie_y) > 3:
-    #         self.tie_y_distribution_x, self.tie_y_distribution = compute_distribution(self.tie_y, 100)
-    #     self.num_games['tie'] = len(self.tie_y)
-    #     self.num_games['total'] = self.num_games['loos'] + self.num_games['tie'] + self.num_games['win']
-    #
     def add_tie_dist(self, val):
         self.tie_dist.append(val)
         self.tie_dist.sort()
 
     def get_probability_of_outcome(self, val_dif_x, val_dif_y):
-        pass
-    #     prob_win_x = self.bayes_law_probability(0, val_dif_x)
-    #     prob_tie_x = self.bayes_law_probability(1, val_dif_x)
-    #     prob_loos_x = self.bayes_law_probability(2, val_dif_x)
-    #
-    #     prob_win_y = self.bayes_law_probability(0, val_dif_y)
-    #     prob_tie_y = self.bayes_law_probability(1, val_dif_y)
-    #     prob_loos_y = self.bayes_law_probability(2, val_dif_y)
+        # dif_x : goals
+        # dif_y : wins
+        prob_win_x = self.bayes_law_probability('by_goals', 'win', val_dif_x)
+        prob_tie_x = self.bayes_law_probability('by_goals', 'tie', val_dif_x)
+        prob_loos_x = self.bayes_law_probability('by_goals', 'loos', val_dif_x)
 
-    # def bayes_law_probability(self, win_tie_loos, in_strength_diff):
-    #     """
-    #     Bayes Law: P(B|A) = P(A|B) * P(B) / P(A)
-    #     :param win_tie_loos 0 - win, 1 - tie, 2 - loos
-    #     :param in_strength_diff:
-    #     :return:
-    #     """
-    #     if  win_tie_loos == 0:
-    #         prob_x = self.
-    #     elif win_tie_loos == 1:
-    #     elif win_tie_loos == 2:
-    #     else:
+        prob_win_y = self.bayes_law_probability('by_wins', 'win', val_dif_y)
+        prob_tie_y = self.bayes_law_probability('by_wins', 'tie', val_dif_y)
+        prob_loos_y = self.bayes_law_probability('by_wins', 'loos', val_dif_y)
+
+    def bayes_law_probability(self, goals_wins, win_tie_loos, in_strength_diff):
+        """
+        Bayes Law: P(B|A) = P(A|B) * P(B) / P(A)
+        :param goals_wins USE GOALS OR WINS
+        :param win_tie_loos 0 - win, 1 - tie, 2 - loos
+        :param in_strength_diff:
+        :return:
+        """
+        """
+        Algo:
+        Fetch probability f(B) that is the probability density function of 'win_tie_loos'
+        Compute P(A|B) = the probability of  in_strength_diff in the f(B) 
+        Compute P(B) = self.num_games[win_tie_loos] / self.num_games['total']
+        there is no need to compute P(A) as it is the same for all test cases
+        """
+        f_b = self.distributions[win_tie_loos][goals_wins]
+        p_b = self.num_games[win_tie_loos] / self.num_games['total']
+        print(p_b)
+        print('total: ' + str(self.num_games['total']))
 
     def plot_team_wim_loos_tie(self):
         colors = {'win': 'g', 'loos': 'r', 'tie': 'b'}
@@ -135,7 +79,7 @@ class Team(object):
             distribution = self.distributions[w_l_t]
             color = colors[w_l_t]
             plt.plot(distribution['by_goals']['x'], distribution['by_goals']['y'], color)
-        plt.title(self.name + ' by goals_distribution')
+        plt.title(self.name[::-1] + ' by goals_distribution')
         plt.show()
 
         plt.figure()
@@ -143,7 +87,7 @@ class Team(object):
             distribution = self.distributions[w_l_t]
             color = colors[w_l_t]
             plt.plot(distribution['by_wins']['x'], distribution['by_wins']['y'], color)
-        plt.title(self.name + ' by wins_distribution')
+        plt.title(self.name[::-1] + ' by wins_distribution')
         plt.show()
 
     def plot_team_strength(self):
@@ -151,7 +95,7 @@ class Team(object):
         x = [coordinates[0] for coordinates in self.strength]
         y = [coordinates[1] for coordinates in self.strength]
         plt.plot(x, y)
-        plt.title(self.name + ' path')
+        plt.title(self.name[::-1] + ' path')
         plt.show()
 
     def print_team(self):

@@ -1,7 +1,9 @@
-import numpy as np
 import math
-from League.League import League
 from copy import deepcopy
+
+import numpy as np
+
+from League.League import League
 
 
 class LeagueSolver(object):
@@ -16,8 +18,8 @@ class LeagueSolver(object):
         """
         # def_dbg = True
         def_dbg = False
-        # def_plt = True
-        def_plt = False
+        def_plt = True
+        # def_plt = False
 
         team_2_ind_dict = deepcopy(self.league.teem_list)
         """making ind to key dict"""
@@ -31,6 +33,7 @@ class LeagueSolver(object):
         last_row_in_A = [0 for i in range(num_teams)]
         last_b = [0, 0]
         for round_ in self.league:
+            len_A = len(A)
             for game in round_:
                 row_in_A = [0 for i in range(num_teams)]
                 t0, t1 = game
@@ -63,7 +66,7 @@ class LeagueSolver(object):
                 for row_ind in range(len(x)):
                     k = ind_2_team_dict[row_ind]
                     self.league.teem_list[k][1].strength.append(list(x[row_ind]))
-                for row_in_A, row_in_b in zip(A[: -1], b[: -1]):
+                for row_in_A, row_in_b in zip(A[len_A:], b[len_A:]):
                     t0, t1 = LeagueSolver.get_team_names_from_row(row_in_A, ind_2_team_dict)
                     t0_strength = self.league.teem_list[t0][1].strength[-1]
                     t1_strength = self.league.teem_list[t1][1].strength[-1]
