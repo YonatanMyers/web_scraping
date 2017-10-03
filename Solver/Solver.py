@@ -32,8 +32,8 @@ class LeagueSolver(object):
         b = []
         last_row_in_A = [0 for i in range(num_teams)]
         last_b = [0, 0]
+        read_A_start = 0
         for round_ in self.league:
-            len_A = len(A)
             for game in round_:
                 row_in_A = [0 for i in range(num_teams)]
                 t0, t1 = game
@@ -66,7 +66,7 @@ class LeagueSolver(object):
                 for row_ind in range(len(x)):
                     k = ind_2_team_dict[row_ind]
                     self.league.teem_list[k][1].strength.append(list(x[row_ind]))
-                for row_in_A, row_in_b in zip(A[len_A:], b[len_A:]):
+                for row_in_A, row_in_b in zip(A[read_A_start:], b[read_A_start:]):
                     t0, t1 = LeagueSolver.get_team_names_from_row(row_in_A, ind_2_team_dict)
                     t0_strength = self.league.teem_list[t0][1].strength[-1]
                     t1_strength = self.league.teem_list[t1][1].strength[-1]
@@ -87,7 +87,7 @@ class LeagueSolver(object):
                                                                       'by_wins')  # for t0 we want to hold t1-t0
                         self.league.teem_list[t1][1].add_strength_val(strength_dy, 'tie',
                                                                       'by_wins')  # for t1 we want to hold t0-t1
-                    if row_in_b[1] > 0:    # t0 wins  (t1 loos)
+                    elif row_in_b[1] > 0:    # t0 wins  (t1 loos)
                         self.league.teem_list[t0][1].add_strength_val(-strength_dx, 'win',
                                                                       'by_goals')  # for t0 we want to hold t1-t0
                         self.league.teem_list[t0][1].add_strength_val(-strength_dy, 'win',
@@ -97,6 +97,17 @@ class LeagueSolver(object):
                                                                       'by_goals')  # for t1 we want to hold t0-t1
                         self.league.teem_list[t1][1].add_strength_val(strength_dy, 'loos',
                                                                       'by_wins')  # for t1 we want to hold t0-t1
+                    elif row_in_b[1] < 0:    # t0 loos  (t1 win)
+                        self.league.teem_list[t1][1].add_strength_val(-strength_dx, 'win',
+                                                                      'by_goals')  # for t0 we want to hold t1-t0
+                        self.league.teem_list[t1][1].add_strength_val(-strength_dy, 'win',
+                                                                      'by_wins')  # for t0 we want to hold t1-t0
+
+                        self.league.teem_list[t0][1].add_strength_val(strength_dx, 'loos',
+                                                                      'by_goals')  # for t1 we want to hold t0-t1
+                        self.league.teem_list[t0][1].add_strength_val(strength_dy, 'loos',
+                                                                      'by_wins')  # for t1 we want to hold t0-t1
+                read_A_start = len(A)
         self.league.print_teems_list_short()
 
         if def_dbg:
