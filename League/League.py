@@ -1,5 +1,10 @@
 from copy import deepcopy
 
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy
+import scipy.spatial
+
 from League.Team import Team
 
 
@@ -52,24 +57,85 @@ class League(object):
         :return: 
         """
         # todo: input validation
-        team_1_ind = int(input('Enter team 1: '))
-        team_2_ind = int(input('Enter team 2: '))
+        more = 1
+        while more !=0:
+            team_1_ind = int(input('Enter team 1: '))
+            team_2_ind = int(input('Enter team 2: '))
 
-        team_1_str = self.ind_2_team_dict[team_1_ind]
-        team_2_str = self.ind_2_team_dict[team_2_ind]
+            team_1_str = self.ind_2_team_dict[team_1_ind]
+            team_2_str = self.ind_2_team_dict[team_2_ind]
 
-        team_1 = self.teem_list[team_1_str][1]
-        team_2 = self.teem_list[team_2_str][1]
+            team_1 = self.teem_list[team_1_str][1]
+            team_2 = self.teem_list[team_2_str][1]
 
-        strength_1 = team_1.strength[-1]
-        strength_2 = team_2.strength[-1]
+            # plot the data so we can look at it and get intuition#
+            plt.figure()
+            colors = ['green', 'red', 'blue']
+            for color, win_loos_tie in zip(colors, ['win', 'loos', 'tie']):
+                team_x = []
+                team_y = []
+                points = []
+                # team_1.plot_team_wim_loos_tie()
+                # team_1.plot_team_strength()
+                for coords in team_1.results_coordinates_diffs[win_loos_tie]:
+                    team_x.append(coords[0] + team_1.strength[-1][0])
+                    team_y.append(coords[1] + team_1.strength[-1][1])
+                    points.append([team_x[-1], team_y[-1]])
+                if len(points) >= 3:
+                    points_ch = np.array(points)
+                    hull = scipy.spatial.ConvexHull(points_ch)
+                    points_ch = hull.points[[hull.vertices]]
+                else:
+                    points_ch = points
 
-        val_dif_for_team_1_x = strength_2[0] - strength_1[0]
-        val_dif_for_team_1_y = strength_2[1] - strength_1[1]
+                plt.plot([p[0] for p in points], [p[1] for p in points], color=color, linestyle='None', marker='x')
+                xs = [p[0] for p in points_ch]
+                ys = [p[1] for p in points_ch]
+                if len(ys) > 0:
+                    xs.append(xs[0])
+                    ys.append(ys[0])
+                plt.plot(xs, ys, color)
+                # plt.plot(points_ch, color)
+                plt.plot(team_1.strength[-1][0], team_1.strength[-1][1], 'ro')
+                team_1.plot_team_strength_no_fig()
+                team_x = []
+                team_y = []
+                points = []
+                # team_2.plot_team_wim_loos_tie()
+                # team_2.plot_team_strength()
+                for coords in team_2.results_coordinates_diffs[win_loos_tie]:
+                    team_x.append(coords[0] + team_2.strength[-1][0])
+                    team_y.append(coords[1] + team_2.strength[-1][1])
+                    points.append([team_x[-1], team_y[-1]])
+                if len(points) >= 3:
+                    points_ch = np.array(points)
+                    hull = scipy.spatial.ConvexHull(points_ch)
+                    points_ch = hull.points[[hull.vertices]]
+                else:
+                    points_ch = points
+                plt.plot([p[0] for p in points], [p[1] for p in points], color=color, linestyle='None', marker='.')
+                xs = [p[0] for p in points_ch]
+                ys = [p[1] for p in points_ch]
+                if len(ys) > 0:
+                    xs.append(xs[0])
+                    ys.append(ys[0])
+                plt.plot(xs, ys, linestyle='--', color=color)
+                # plt.plot(team_x, team_y, linestyle='--', color=color)
+                plt.plot(team_2.strength[-1][0], team_2.strength[-1][1], 'go')
+                team_2.plot_team_strength_no_fig()
+            plt.show()
 
-        # val_dif_for_team_1_x - by goals
-        # val_dif_for_team_1_y - by wins
-        team_1.get_probability_of_outcome(val_dif_for_team_1_x, val_dif_for_team_1_y)
+            strength_1 = team_1.strength[-1]
+            strength_2 = team_2.strength[-1]
+
+            val_dif_for_team_1_x = strength_2[0] - strength_1[0]
+            val_dif_for_team_1_y = strength_2[1] - strength_1[1]
+
+            # val_dif_for_team_1_x - by goals
+            # val_dif_for_team_1_y - by wins
+            team_1.get_probability_of_outcome(val_dif_for_team_1_x, val_dif_for_team_1_y)
+
+            more = int(input('More? '))
 
     def __iter__(self):
         self.iter_counter = 0

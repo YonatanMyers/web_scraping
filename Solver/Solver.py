@@ -18,8 +18,8 @@ class LeagueSolver(object):
         """
         # def_dbg = True
         def_dbg = False
-        def_plt = True
-        # def_plt = False
+        # def_plt = True
+        def_plt = False
 
         team_2_ind_dict = deepcopy(self.league.teem_list)
         """making ind to key dict"""
@@ -55,7 +55,7 @@ class LeagueSolver(object):
                 b.append([b_0, b_1])
                 # b.append(b_0)
 
-            if round_.round_n > 3:
+            if round_.round_n > 0:
                 copy_A_for_solving_round = deepcopy(A)
                 copy_A_for_solving_round.append(last_row_in_A)
                 copy_b_for_solving_round = deepcopy(b)
@@ -79,34 +79,41 @@ class LeagueSolver(object):
                         self.league.teem_list[t0][1].add_tie_dist(strength_dist)
                         self.league.teem_list[t1][1].add_tie_dist(strength_dist)
 
+                        self.league.teem_list[t0][1].add_result_coordinates(-strength_dx, -strength_dy, 'tie')
                         self.league.teem_list[t0][1].add_strength_val(-strength_dx, 'tie',
                                                                       'by_goals')  # for t0 we want to hold t1-t0
-                        self.league.teem_list[t1][1].add_strength_val(strength_dx, 'tie',
-                                                                      'by_goals')  # for t1 we want to hold t0-t1
                         self.league.teem_list[t0][1].add_strength_val(-strength_dy, 'tie',
                                                                       'by_wins')  # for t0 we want to hold t1-t0
+
+                        self.league.teem_list[t1][1].add_result_coordinates(strength_dx, strength_dy, 'tie')
+                        self.league.teem_list[t1][1].add_strength_val(strength_dx, 'tie',
+                                                                      'by_goals')  # for t1 we want to hold t0-t1
                         self.league.teem_list[t1][1].add_strength_val(strength_dy, 'tie',
                                                                       'by_wins')  # for t1 we want to hold t0-t1
                     elif row_in_b[1] > 0:    # t0 wins  (t1 loos)
+                        self.league.teem_list[t0][1].add_result_coordinates(-strength_dx, -strength_dy, 'win')
                         self.league.teem_list[t0][1].add_strength_val(-strength_dx, 'win',
                                                                       'by_goals')  # for t0 we want to hold t1-t0
                         self.league.teem_list[t0][1].add_strength_val(-strength_dy, 'win',
                                                                       'by_wins')  # for t0 we want to hold t1-t0
 
+                        self.league.teem_list[t1][1].add_result_coordinates(strength_dx, strength_dy, 'loos')
                         self.league.teem_list[t1][1].add_strength_val(strength_dx, 'loos',
                                                                       'by_goals')  # for t1 we want to hold t0-t1
                         self.league.teem_list[t1][1].add_strength_val(strength_dy, 'loos',
                                                                       'by_wins')  # for t1 we want to hold t0-t1
                     elif row_in_b[1] < 0:    # t0 loos  (t1 win)
-                        self.league.teem_list[t1][1].add_strength_val(-strength_dx, 'win',
-                                                                      'by_goals')  # for t0 we want to hold t1-t0
-                        self.league.teem_list[t1][1].add_strength_val(-strength_dy, 'win',
-                                                                      'by_wins')  # for t0 we want to hold t1-t0
-
-                        self.league.teem_list[t0][1].add_strength_val(strength_dx, 'loos',
+                        self.league.teem_list[t0][1].add_result_coordinates(-strength_dx, -strength_dy, 'loos')
+                        self.league.teem_list[t0][1].add_strength_val(-strength_dx, 'loos',
                                                                       'by_goals')  # for t1 we want to hold t0-t1
-                        self.league.teem_list[t0][1].add_strength_val(strength_dy, 'loos',
+                        self.league.teem_list[t0][1].add_strength_val(-strength_dy, 'loos',
                                                                       'by_wins')  # for t1 we want to hold t0-t1
+
+                        self.league.teem_list[t1][1].add_result_coordinates(strength_dx, strength_dy, 'win')
+                        self.league.teem_list[t1][1].add_strength_val(strength_dx, 'win',
+                                                                      'by_goals')  # for t0 we want to hold t1-t0
+                        self.league.teem_list[t1][1].add_strength_val(strength_dy, 'win',
+                                                                      'by_wins')  # for t0 we want to hold t1-t0
                 read_A_start = len(A)
         self.league.print_teems_list_short()
 

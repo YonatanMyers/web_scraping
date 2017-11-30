@@ -35,9 +35,15 @@ class WebClient(object):
         rounds = []
         team_2_ind = {}
         teem_list = ''
-        urls = [[9, 6, 'http://sports.walla.co.il/leagueround/211', 'str(i)', '?leagueId=2437']]
+        # urls = [[21109, 21135, 'http://sports.walla.co.il/leagueround/', 'str(i)', '?leagueId=2437']]  # isr
+        # urls = [[21167, 21208, 'http://sports.walla.co.il/leagueround/', 'str(i)', '?leagueId=2442']]  # GB england
+        urls = [[21286, 21324, 'http://sports.walla.co.il/leagueround/', 'str(i)', '?leagueId=2445']]  # spain
+        # urls = [[21333, 21373, 'http://sports.walla.co.il/leagueround/', 'str(i)', '?leagueId=2446']]  # Italy
+        # urls = [[21208, 21242, 'http://sports.walla.co.il/leagueround/', 'str(i)', '?leagueId=2444']]  # germany
+        # urls = [[21242, 21329, 'http://sports.walla.co.il/leagueround/', 'str(i)', '?leagueId=2443']]  # France
+
         for url_i in urls:
-            for i in range(url_i[0], url_i[0] + url_i[1]):
+            for i in range(url_i[0], url_i[1]):
                 url = self.make_url(url_i, i)
                 self.chrome.get(url)
                 teem_list = self.get_all(teems_x_path)
@@ -47,7 +53,9 @@ class WebClient(object):
                         team_2_ind[team] = team_i
                 if len(scores_str) > 0:
                     round_counter += 1
-                    rounds.append(Round(round_counter, teem_list, scores_str))
+                    rounds.append(Round(round_counter, teem_list, scores_str, 'end'))
+                    # round_counter += 1
+                    # rounds.append(Round(round_counter, teem_list, scores_str, 'half'))
 
         return League(team_2_ind, rounds)
 
@@ -62,6 +70,7 @@ class WebClient(object):
         return elements
 
     def make_url(self, url_i, i):
+        # example url_i input :::   [9, 26, 'http://sports.walla.co.il/leagueround/211', 'str(i)', '?leagueId=2437']
         url_i = url_i[2:]
         str_i = str(i)
         if i < 10:

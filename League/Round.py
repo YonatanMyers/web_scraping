@@ -1,4 +1,5 @@
 from Util.utilFunctions import get_end_score
+from Util.utilFunctions import get_half_score
 # todo: add connectivity matrix and transitive connectivity graph
 # todo: make empty round by marking the game scores as -1 this will indicate to the solver to solve for this round/game
 
@@ -13,7 +14,7 @@ class Round(object):
      The Round also holds the number of the round.
     """
 
-    def __init__(self, round_n, teem_list, scores_str):
+    def __init__(self, round_n, teem_list, scores_str, end_half):
         """
         The
         Init the Round object
@@ -27,9 +28,14 @@ class Round(object):
         self.iter_counter = 0
         self.round_n = round_n
         # strip the elements in the score_str to get the score
-        scores = [get_end_score(sc) for sc in scores_str]
-        # make the (team, goal) pairs
-        team_score = list(zip(teem_list, scores))
+        team_score = []
+        if end_half == 'end':
+            scores = [get_end_score(sc) for sc in scores_str]
+            # make the (team, goal) pairs
+            team_score = list(zip(teem_list, scores))
+        else:
+            scores = [get_half_score(sc) for sc in scores_str]
+            team_score = list(zip(teem_list, scores))
 
         self.games = []
         for i in range(0, len(team_score)-1, 2):

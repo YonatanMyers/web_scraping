@@ -26,6 +26,11 @@ class Team(object):
                               'loos': {'by_goals': {'x': [], 'y': []}, 'by_wins': {'x': [], 'y': []}},
                               'tie': {'by_goals': {'x': [], 'y': []}, 'by_wins': {'x': [], 'y': []}}}
 
+        # this holds the game results sorted to win, loos, tie, the results are in the format:
+        # of pairs (diff_by_goals, diff_by_wins) where the diff is in the format end-beginning meaning that
+        # it is the apposing_team_val - this_team_val
+        self.results_coordinates_diffs = {'win': [], 'loos': [], 'tie': []}
+
     def add_strength_val(self, val, win_loos_tie, goals_wins):
         self.strength_values[win_loos_tie][goals_wins].append(val)
         self.strength_values[win_loos_tie][goals_wins].sort()
@@ -36,6 +41,9 @@ class Team(object):
 
         self.num_games[win_loos_tie] = len(self.strength_values[win_loos_tie][goals_wins])
         self.num_games['total'] = self.num_games['loos'] + self.num_games['tie'] + self.num_games['win']
+
+    def add_result_coordinates(self, diff_goals, diff_wins, win_loos_tie):
+        self.results_coordinates_diffs[win_loos_tie].append((diff_goals, diff_wins))
 
     def add_tie_dist(self, val):
         self.tie_dist.append(val)
@@ -69,8 +77,6 @@ class Team(object):
         """
         f_b = self.distributions[win_tie_loos][goals_wins]
         p_b = self.num_games[win_tie_loos] / self.num_games['total']
-        print(p_b)
-        print('total: ' + str(self.num_games['total']))
 
     def plot_team_wim_loos_tie(self):
         colors = {'win': 'g', 'loos': 'r', 'tie': 'b'}
@@ -97,6 +103,11 @@ class Team(object):
         plt.plot(x, y)
         plt.title(self.name[::-1] + ' path')
         plt.show()
+
+    def plot_team_strength_no_fig(self):
+        x = [coordinates[0] for coordinates in self.strength]
+        y = [coordinates[1] for coordinates in self.strength]
+        plt.plot(x, y)
 
     def print_team(self):
         print('Team:')

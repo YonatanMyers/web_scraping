@@ -15,6 +15,22 @@ def get_end_score(sc):
     return res_int
 
 
+def get_half_score(sc):
+    state = 0
+    res_str = ''
+    for l in sc:
+        if l == r'(':
+            state = 1
+        if state != 0:
+            res_str += l
+        if l == r')':
+            state = 0
+    res_str = res_str.strip('(')
+    res_str = res_str.strip(')')
+    res_int = int(res_str)
+    return res_int
+
+
 def compute_distribution(in_sorted_vector, n_output_vec_size):
     """
     Under normal sercumstance we would make a histogram but in our condition we do not have manny sample points and no

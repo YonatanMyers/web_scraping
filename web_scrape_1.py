@@ -9,9 +9,14 @@ from WebClient.WebClient import WebClient
 
 
 def main():
-    stored_file_name = 'isr_league.pickle'
-    # stored_file_name = 'isr_league.pickle_1'
-    teems_x_path = """//*/h4/a"""
+    # stored_file_name = 'isr_league.pickle'  # ISR
+    # stored_file_name = 'eng_prem.pickle'  # premier league
+    stored_file_name = 'spain.pickle'  # Spain
+    # stored_file_name = 'italy.pickle'  # Italy
+    # stored_file_name = 'germany.pickle'  # Germany
+    # stored_file_name = 'france.pickle'  # France
+
+    teems_x_path = """//*/div/h4[@class="title"]"""
     score_x_path = """//*/div/p[@class="score"]"""
 
     load = False
